@@ -1,0 +1,327 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id                String   @id @default(uuid())
+  name              String
+  type              String   @default("restaurant")
+  subscriptionTier  String   @default("free")
+  isVerified        Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  users             User[]
+  branches          Branch[]
+  ngos              NGO[]
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  passwordHash    String
+  name            String
+  phone           String?
+  role            String   @default("viewer")
+  isActive        Boolean  @default(true)
+  lastLogin       DateTime?
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  assignedDonations Donation[] @relation("AssignedVolunteer")
+  drivenDonations   Donation[] @relation("AssignedDriver")
+  routes            Route[]
+  auditLogs         AuditLog[]
+  googleConnections GoogleConnection[]
+  billingConnections BillingConnection[]
+}
+
+model Branch {
+  id            String   @id @default(uuid())
+  name          String
+  address       String   @default("")
+  lat           Float?
+  lng           Float?
+  cuisineType   String?
+  avgCapacity   Int?
+  openTime      String?
+  closeTime     String?
+  timezone      String   @default("Asia/Kolkata")
+  organizationId String
+  organization  Organization @relation(fields: [organizationId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  menus         Menu[]
+  inventoryItems InventoryItem[]
+  reservations  Reservation[]
+  orders        Order[]
+  foodBatches   FoodBatch[]
+  sensors       Sensor[]
+  predictions   Prediction[]
+}
+
+model Menu {
+  id        String   @id @default(uuid())
+  name      String
+  isActive  Boolean  @default(true)
+  validFrom DateTime?
+  validTo   DateTime?
+  branchId  String
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  createdAt DateTime @default(now())
+
+  dishes    Dish[]
+}
+
+model Dish {
+  id              String   @id @default(uuid())
+  name            String
+  category        String?
+  unitWeight      Float?
+  avgPrice        Float?
+  prepTime        Int?
+  isSignature     Boolean  @default(false)
+  popularityScore Float?
+  menuId          String
+  menu            Menu     @relation(fields: [menuId], references: [id])
+  createdAt       DateTime @default(now())
+
+  ingredients     Ingredient[]
+  foodBatches     FoodBatch[]
+  orderItems      OrderItem[]
+}
+
+model Ingredient {
+  id                String @id @default(uuid())
+  name              String
+  quantityPerDish   Float
+  unit              String @default("g")
+  isPerishable      Boolean @default(false)
+  shelfLifeHours    Int?
+  dishId            String
+  dish              Dish    @relation(fields: [dishId], references: [id])
+}
+
+model InventoryItem {
+  id              String   @id @default(uuid())
+  ingredientName  String
+  quantity        Float
+  unit            String   @default("kg")
+  threshold       Float?
+  expiryDate      DateTime?
+  costPerUnit     Float?
+  lastRestocked   DateTime?
+  branchId        String
+  branch          Branch   @relation(fields: [branchId], references: [id])
+  supplierId      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Reservation {
+  id              String   @id @default(uuid())
+  customerName    String?
+  customerCount   Int
+  reservationTime DateTime
+  source          String?
+  status          String   @default("confirmed")
+  specialOccasion String?
+  branchId        String
+  branch          Branch   @relation(fields: [branchId], references: [id])
+  createdAt       DateTime @default(now())
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  orderTime     DateTime    @default(now())
+  orderType     String      @default("dine_in")
+  totalAmount   Float?
+  status        String      @default("placed")
+  isBulkOrder   Boolean     @default(false)
+  customerCount Int?
+  branchId      String
+  branch        Branch      @relation(fields: [branchId], references: [id])
+
+  orderItems    OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  quantity  Int
+  unitPrice Float?
+  wasServed Boolean @default(true)
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  dishId    String
+  dish      Dish    @relation(fields: [dishId], references: [id])
+}
+
+model FoodBatch {
+  id                String     @id @default(uuid())
+  quantityPrepared  Int
+  quantitySold      Int        @default(0)
+  quantityLeftover  Int        @default(0)
+  quantityDonated   Int        @default(0)
+  quantityWasted    Int        @default(0)
+  preparedAt        DateTime   @default(now())
+  servedUntil       DateTime?
+  isSafeForDonation Boolean?
+  safetyCheckedAt   DateTime?
+  branchId          String
+  branch            Branch     @relation(fields: [branchId], references: [id])
+  dishId            String
+  dish              Dish       @relation(fields: [dishId], references: [id])
+
+  donations         Donation[]
+}
+
+model Donation {
+  id              String         @id @default(uuid())
+  weightKg        Float
+  mealEquivalent  Int?
+  status          String         @default("pending")
+  pickupTime      DateTime?
+  deliveryTime    DateTime?
+  foodSafe        Boolean?
+  safetyNotes     String?
+  qrCode          String?
+  temperatureLogs String?
+  foodBatchId     String
+  foodBatch       FoodBatch      @relation(fields: [foodBatchId], references: [id])
+  ngoId           String?
+  ngo             NGO?           @relation(fields: [ngoId], references: [id])
+  volunteerId     String?
+  volunteer       User?          @relation("AssignedVolunteer", fields: [volunteerId], references: [id])
+  driverId        String?
+  driver          User?          @relation("AssignedDriver", fields: [driverId], references: [id])
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model NGO {
+  id                  String        @id @default(uuid())
+  name                String
+  registrationNumber  String?       @unique
+  address             String?
+  lat                 Float?
+  lng                 Float?
+  contactPerson       String?
+  phone               String?
+  email               String?
+  maxCapacityKg       Int?
+  currentStorageKg    Int           @default(0)
+  storageType         String?
+  operatingHours      String?
+  isVerified          Boolean       @default(false)
+  serviceAreaRadiusKm Int?
+  organizationId      String
+  organization        Organization  @relation(fields: [organizationId], references: [id])
+  createdAt           DateTime      @default(now())
+
+  donations           Donation[]
+  vehicles            Vehicle[]
+}
+
+model Vehicle {
+  id              String  @id @default(uuid())
+  type            String  @default("car")
+  capacityKg      Int
+  hasColdStorage  Boolean @default(false)
+  plateNumber     String?
+  isActive        Boolean @default(true)
+  ngoId           String
+  ngo             NGO     @relation(fields: [ngoId], references: [id])
+
+  routes          Route[]
+}
+
+model Route {
+  id                  String   @id @default(uuid())
+  date                DateTime @default(now())
+  totalDistanceKm     Float?
+  estimatedDurationMin Int?
+  actualDurationMin   Int?
+  stops               String?
+  temperatureLogs     String?
+  status              String   @default("planned")
+  driverId            String?
+  driver              User?    @relation(fields: [driverId], references: [id])
+  vehicleId           String?
+  vehicle             Vehicle? @relation(fields: [vehicleId], references: [id])
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Sensor {
+  id          String   @id @default(uuid())
+  type        String
+  deviceId    String
+  location    String?
+  isActive    Boolean  @default(true)
+  lastReading String?
+  lastSeen    DateTime?
+  batteryLevel Float?
+  branchId    String
+  branch      Branch   @relation(fields: [branchId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Prediction {
+  id              String   @id @default(uuid())
+  type            String   @default("demand")
+  inputSnapshot   String?
+  predictedValue  Float
+  actualValue     Float?
+  confidenceScore Float?
+  modelVersion    String?
+  error           Float?
+  branchId        String
+  branch          Branch   @relation(fields: [branchId], references: [id])
+  madeAt          DateTime @default(now())
+}
+
+model BillingConnection {
+  id            String   @id @default(uuid())
+  userId        String
+  service       String
+  serviceName   String
+  connected     Boolean  @default(true)
+  metadata      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model GoogleConnection {
+  id            String   @id @default(uuid())
+  userId        String
+  service       String
+  accessToken   String
+  refreshToken  String?
+  scope         String
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  resourceType String
+  resourceId  String?
+  details     String?
+  ipAddress   String?
+  userAgent   String?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
