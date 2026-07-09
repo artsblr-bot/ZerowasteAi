@@ -38,8 +38,8 @@ export function getAuthUser(req: NextRequest): JwtPayload | null {
   }
   const cookieHeader = req.headers.get("cookie") || ""
   const token = cookieHeader
-    .split("; ")
-    .find((c) => c.trim().startsWith("token="))
+    .split(/;\s*/)
+    .find((c) => c.startsWith("token="))
     ?.split("=")[1]
   if (token) return verifyToken(token)
   return null

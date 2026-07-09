@@ -9,7 +9,7 @@ import { resolveBranchId } from "@/lib/branch"
 
 export async function GET(req: NextRequest) {
   try {
-    const auth = await getAuthUser(req)
+    const auth = getAuthUser(req)
     if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
     const branchId = await resolveBranchId(auth.orgId, req.nextUrl.searchParams.get("branchId"))
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
       temperature: weather?.temperature,
       reservations,
       historicalData: { last_4_same_days_avg: histAvg },
-      specialEvents: [],
+      specialEvents: events?.map((e: any) => e.name || "event") || [],
     })
 
     const prediction = await prisma.prediction.create({

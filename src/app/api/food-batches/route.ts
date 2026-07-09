@@ -38,12 +38,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const leftover = Math.max(0, quantityPrepared - quantitySold)
+    const sold = quantitySold ?? 0
+    const leftover = Math.max(0, quantityPrepared - sold)
 
     const batch = await prisma.foodBatch.create({
       data: {
         quantityPrepared,
-        quantitySold: quantitySold ?? 0,
+        quantitySold: sold,
         quantityLeftover: leftover,
         quantityDonated: 0,
         quantityWasted: 0,

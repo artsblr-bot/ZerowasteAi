@@ -51,7 +51,7 @@ export default function RegisterPage() {
 
   const canProceed = () => {
     if (step === 0) return form.organizationName.length >= 2
-    if (step === 1) return form.name.length >= 2 && form.email.includes("@") && form.phone.length >= 10
+    if (step === 1) return form.name.length >= 2 && form.email.includes("@")
     if (step === 2) return form.password.length >= 8
     return false
   }
