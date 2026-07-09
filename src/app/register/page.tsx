@@ -57,25 +57,7 @@ export default function RegisterPage() {
   }
 
   async function handleSubmit() {
-    setLoading(true)
-    setError("")
-    try {
-      const result = await api.auth.register({
-        email: form.email,
-        password: form.password,
-        name: form.name,
-        phone: form.phone,
-        role: form.role || "owner",
-        cuisineType: form.cuisineType,
-        organizationName: form.organizationName,
-        organizationType: form.organizationType as any,
-      })
-      router.push("/setup/connect")
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed")
-    } finally {
-      setLoading(false)
-    }
+    window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
   }
 
   return (

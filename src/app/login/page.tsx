@@ -11,12 +11,7 @@ const googleConfigured = Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)
 
 function GoogleButton() {
   function handleGoogleSignIn() {
-    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-    if (!clientId) return
-    const redirectUri = `${window.location.origin}/api/auth/connect/callback`
-    const scope = "openid email profile"
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline&prompt=consent&state=signin`
-    window.location.href = authUrl
+    window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
   }
 
   return (
@@ -46,16 +41,7 @@ function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
-    setError("")
-    try {
-      await api.auth.login(email, password)
-      router.push("/app")
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed")
-    } finally {
-      setLoading(false)
-    }
+    window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
   }
 
   return (
