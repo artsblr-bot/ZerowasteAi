@@ -150,7 +150,7 @@ function LoginForm() {
 
         <div className="mt-6 space-y-3 text-center">
           <p className="text-xs text-bmw-muted-soft">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="text-accent hover:brightness-110">Create one</Link>
           </p>
         </div>

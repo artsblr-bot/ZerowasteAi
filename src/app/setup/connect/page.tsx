@@ -167,7 +167,7 @@ function ConnectWizard() {
             </div>
             <h1 className="text-title-md text-bmw-ink">Connect your data</h1>
             <p className="mt-1 text-sm font-light text-bmw-muted">
-              Link the tools you already use. We'll read everything automatically.
+              Link the tools you already use. We&apos;ll read everything automatically.
             </p>
           </div>
 
@@ -349,7 +349,7 @@ function ConnectWizard() {
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-500/10">
                   <CheckCircle size={32} className="text-green-400" />
                 </div>
-                <h2 className="text-title-md text-bmw-ink">You're all set!</h2>
+                <h2 className="text-title-md text-bmw-ink">You&apos;re all set!</h2>
                 <p className="mt-2 text-center text-sm text-bmw-muted">
                   Your data is connected. The AI is analyzing everything and will show your first forecast shortly.
                 </p>

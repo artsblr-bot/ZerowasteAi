@@ -72,7 +72,7 @@ export default function MenuPage() {
       <FadeUp delay={0.1}>
         <div className="rounded-card border border-bmw-hairline bg-bmw-canvas p-5 shadow-card transition-all duration-300 hover:shadow-card-hover">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-title-sm text-bmw-ink">Today's Menu</h2>
+            <h2 className="text-title-sm text-bmw-ink">Today&apos;s Menu</h2>
             <Badge variant="success">{menuData?.menus?.length ? "Active" : "No menu"}</Badge>
           </div>
           <div className="flex flex-col gap-2">

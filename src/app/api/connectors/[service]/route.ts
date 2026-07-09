@@ -3,7 +3,7 @@ import { getAuthUser } from "@/lib/auth"
 import { fetchGmailOrderSummary, fetchDriveFiles, getConnectedServices } from "@/lib/connectors"
 import { prisma } from "@/lib/prisma"
 
-export const billingAppsMeta = [
+const billingAppsMeta = [
   { id: "zomato", name: "Zomato" },
   { id: "swiggy", name: "Swiggy" },
   { id: "petpooja", name: "Petpooja" },

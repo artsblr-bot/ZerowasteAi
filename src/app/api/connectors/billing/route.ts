@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getAuthUser } from "@/lib/auth"
 
-export const billingApps = [
+const billingApps = [
   { id: "zomato", name: "Zomato" },
   { id: "swiggy", name: "Swiggy" },
   { id: "petpooja", name: "Petpooja" },

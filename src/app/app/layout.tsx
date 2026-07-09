@@ -94,7 +94,7 @@ export default function DashboardLayout({
               <span className="text-[10px] font-bold text-white">AI</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-bmw-ink">Today's Prediction</span>
+              <span className="text-sm font-bold text-bmw-ink">Today&apos;s Prediction</span>
               <span className="text-xs text-bmw-muted">Request prediction from Dashboard</span>
             </div>
           </div>

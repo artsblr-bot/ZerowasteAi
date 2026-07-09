@@ -91,7 +91,7 @@ export default function DonationsPage() {
         <FadeUp>
           <div className="rounded-card border border-bmw-hairline bg-bmw-canvas p-5 shadow-card transition-all duration-300 hover:shadow-card-hover">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-title-sm text-bmw-ink">Today's Surplus Prediction</h2>
+              <h2 className="text-title-sm text-bmw-ink">Today&apos;s Surplus Prediction</h2>
               <Badge variant="info">AI Estimated</Badge>
             </div>
             <div className="rounded-card p-5" style={{ background: "color-mix(in srgb, var(--color-accent) 5%, var(--color-bg-soft))" }}>

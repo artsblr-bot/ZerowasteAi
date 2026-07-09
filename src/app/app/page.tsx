@@ -303,7 +303,7 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="flex items-center justify-center py-8 text-sm font-light text-bmw-muted">
-              Click "Run Prediction" to get started
+              Click &quot;Run Prediction&quot; to get started
             </div>
           )}
         </div>
@@ -342,7 +342,7 @@ export default function DashboardPage() {
               <div className="mt-2 rounded-btn p-3" style={{ background: "color-mix(in srgb, var(--color-accent) 8%, transparent)" }}>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-[1.2px] text-accent">
-                    Today's Estimate
+                    Today&apos;s Estimate
                   </span>
                   <span className="text-title-sm text-accent">{pred.predictedCustomers}</span>
                 </div>
@@ -360,7 +360,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <TrendingUp size={16} className="text-accent" />
               <div>
-                <h2 className="text-title-sm text-bmw-ink">How Accurate We've Been</h2>
+                <h2 className="text-title-sm text-bmw-ink">How Accurate We&apos;ve Been</h2>
                 <p className="text-[10px] text-bmw-muted-soft">Our estimated vs actual customers — we improve every week</p>
               </div>
             </div>
